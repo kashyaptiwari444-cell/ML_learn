@@ -4,147 +4,138 @@
     <title>PG Price Prediction</title>
   </head>
   <body>
-    {% comment %}
-    <h1>PG Price Prediction</h1>
-    {% endcomment %}
     <p>Welcome to the PG Price Prediction app!</p>
-
     <form method="post">
       {% csrf_token %}
 
+      <!-- City -->
       <label>City</label>
-      <select id="city">
+      <select id="city" name="city" required>
         <option value="">Select City</option>
         <option value="Delhi">Delhi</option>
         <option value="Noida">Noida</option>
         <option value="Gurugram">Gurugram</option>
         <option value="Lucknow">Lucknow</option>
         <option value="Prayagraj">Prayagraj</option>
-
-        {% comment %}
-        <option value="Jaipur">Jaipur</option>
-        <option value="Pune">Pune</option>
-        <option value="Hyderabad">Hyderabad</option>
-        <option value="Bengaluru">Bengaluru</option>
-        <option value="Mumbai">Mumbai</option>
-        {% endcomment %}
       </select>
-
       <br /><br />
 
+      <!-- Area -->
       <label>Area</label>
-      <select id="area">
+      <select id="area" name="area" required>
         <option value="">Select Area</option>
       </select>
       <br /><br />
 
+      <!-- Room Type -->
       <label>Room Type</label>
-      <select id="roomType">
+      <select id="room_type" name="room_type" required>
         <option value="">Select Room Type</option>
         <option value="1RK">1 RK</option>
         <option value="1BHK">1 BHK</option>
         <option value="2BHK">2 BHK</option>
         <option value="3BHK">3 BHK</option>
       </select>
-
       <br /><br />
-      <label>Sharing </label>
-      <select id="sharing">
+
+      <!-- Sharing -->
+      <label>Sharing</label>
+      <select id="sharing" name="sharing" required>
         <option value="">Select Sharing</option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-
       <br /><br />
 
+      <!-- Room Size -->
       <label>Room Size SQFT</label>
       <input
         type="number"
-        id="roomSize"
+        id="room_size_sqft"
+        name="room_size_sqft"
         placeholder="Enter Room Size in SQFT"
         required
       />
-
       <br /><br />
 
+      <!-- Food -->
       <label>Food</label>
-      <select id="food">
+      <select id="food" name="food" required>
         <option value="">Select Food Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- WiFi -->
       <label>WiFi</label>
-      <select id="wifi">
+      <select id="wifi" name="wifi" required>
         <option value="">Select WiFi Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- AC -->
       <label>AC</label>
-      <select id="ac">
+      <select id="ac" name="ac" required>
         <option value="">Select AC Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- Attached Bathroom -->
       <label>Attached Bathroom</label>
-      <select id="attachedBathroom">
+      <select id="attached_bathroom" name="attached_bathroom" required>
         <option value="">Select Attached Bathroom Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- Furnished -->
       <label>Furnished</label>
-      <select id="furnished">
+      <select id="furnished" name="furnished" required>
         <option value="">Select Furnished Option</option>
         <option value="Fully Furnished">Fully Furnished</option>
         <option value="Semi Furnished">Semi Furnished</option>
         <option value="Unfurnished">Unfurnished</option>
       </select>
-
       <br /><br />
-
+      <!-- Parking -->
       <label>Parking</label>
-      <select id="parking">
+      <select id="parking" name="parking" required>
         <option value="">Select Parking Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- CCTV -->
       <label>CCTV</label>
-      <select id="cctv">
+      <select id="cctv" name="cctv" required>
         <option value="">Select CCTV Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-
       <br /><br />
-
+      <!-- Power Backup -->
       <label>Power Backup</label>
-      <select id="powerBackup">
+      <select id="power_backup" name="power_backup" required>
         <option value="">Select Power Backup Option</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
+      <br /><br />
+      <input type="submit" value="Predict Rent" />
     </form>
-
+    {% if rent %}
+    <div class="result">
+      <h2>Predicted Rent</h2>
+      <p>₹ {{ rent }} / month</p>
+    </div>
+    {% endif %}
     <script>
       const city = document.getElementById("city");
       const area = document.getElementById("area");
-
       const cities = {
         Delhi: [
           "Laxmi Nagar",
@@ -158,7 +149,6 @@
           "Vijay Nagar",
           "South Extension",
         ],
-
         Noida: [
           "Sector 15",
           "Sector 16",
@@ -171,7 +161,6 @@
           "Sector 76",
           "Sector 137",
         ],
-
         Gurugram: [
           "Sector 14",
           "Sector 15",
@@ -184,7 +173,6 @@
           "DLF Phase 2",
           "DLF Phase 3",
         ],
-
         Lucknow: [
           "Gomti Nagar",
           "Indira Nagar",
@@ -197,7 +185,6 @@
           "Chinhat",
           "Ashiyana",
         ],
-
         Prayagraj: [
           "Katra",
           "Civil Lines",
@@ -211,19 +198,14 @@
           "Naini",
         ],
       };
-
       city.addEventListener("change", function () {
         area.innerHTML = '<option value="">Select Area</option>';
-
         const selectedCity = city.value;
-
         if (cities[selectedCity]) {
           cities[selectedCity].forEach(function (areaName) {
             const option = document.createElement("option");
-
             option.value = areaName;
             option.textContent = areaName;
-
             area.appendChild(option);
           });
         }
