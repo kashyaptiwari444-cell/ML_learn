@@ -11,6 +11,8 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import Pipeline
 
+from sklearn.metrics import r2_score
+
 
 def predict_price(request):
 
@@ -64,6 +66,12 @@ def predict_price(request):
 
     # Train model
     model.fit(X_train, y_train)
+    
+    # Test data par prediction
+    y_pred = model.predict(X_test)
+
+    # Metrics   
+    r2 = r2_score(y_test, y_pred)
 
     # POST request
     if request.method == "POST":
@@ -102,13 +110,24 @@ def predict_price(request):
         })
 
         # Prediction
+        
+        print("INPUT DATA:")
+        print(input_data)
+
         result = model.predict(input_data)
+        
+        print("PREDICTION:")
+        print(result)
+        
+        print("R2 SCORE ==== :")
+        print(r2)
 
         return render(
             request,
             "prediction.html",
             {
-                "result": result[0]
+                "result": result[0],
+                "r2_score": r2
             }
         )
         print("""================================================================================================================================================================================================

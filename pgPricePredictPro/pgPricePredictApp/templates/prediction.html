@@ -127,12 +127,16 @@
       <br /><br />
       <input type="submit" value="Predict Rent" />
     </form>
-    {% if rent %}
+
+    {% if rent is not None %}
     <div class="result">
       <h2>Predicted Rent</h2>
-      <p>₹ {{ rent }} / month</p>
+      <h3>₹ {{ rent|floatformat:0 }} / month</h3>
+
+      <p>Model R² Score: {{ r2_score|floatformat:4 }}</p>
     </div>
     {% endif %}
+
     <script>
       const city = document.getElementById("city");
       const area = document.getElementById("area");
